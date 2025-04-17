@@ -1,12 +1,14 @@
-import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
 import '../../enums/status_console.dart';
 import '../../helpers/console_log.dart';
 import '../permission/permission_manager.dart';
 
 class Localizacao {
   final PermissionManager _permissionManager = PermissionManager();
+  final Location _location = Location();
 
-  Future<Position?> obterLocalizacaoAtual() async {
+  Future<LocationData?> obterLocalizacaoAtual() async {
+    // Verifica e solicita permissão de localização
     final isGranted = await _permissionManager.handleLocationPermission();
     if (!isGranted) {
       ConsoleLog.mensagem(
@@ -18,20 +20,17 @@ class Localizacao {
     }
 
     try {
-      final position = await Geolocator.getCurrentPosition(
-        locationSettings: LocationSettings(
-          accuracy: LocationAccuracy.high,
-          distanceFilter: 0,
-        ),
-      );
+      // Obtém a localização atual
+      final locationData = await _location.getLocation();
 
       ConsoleLog.mensagem(
         titulo: 'Localização obtida',
         mensagem:
-            "Latitude=${position.latitude}, Longitude=${position.longitude}",
+            "Latitude=${locationData.latitude}, Longitude=${locationData.longitude}",
         tipo: StatusConsole.sucesso,
       );
-      return position;
+
+      return locationData;
     } catch (e) {
       ConsoleLog.mensagem(
         titulo: 'Erro ao obter localização',

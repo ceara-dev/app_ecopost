@@ -22,7 +22,7 @@ dependencies:
   flutter_native_splash: ^2.4.4 # Splash screen configuration
   location: ^7.0.1
   permission_handler: ^12.0.0+1
-  geolocator: ^14.0.0
+  #geolocator: ^14.0.0
   package_info_plus: ^8.3.0
 # Configuration for `flutter_native_splash` package
 flutter_native_splash:

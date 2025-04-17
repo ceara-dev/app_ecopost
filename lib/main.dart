@@ -1,12 +1,13 @@
 // main.dart
 import 'package:flutter/material.dart';
+import 'providers/home_provider.dart';
 import 'providers/login_provider.dart';
-import 'database/database.dart';
-import 'routes/routes.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 import 'wigets/custom_flutter_error_widget.dart';
+import 'database/database.dart';
+import 'utils/app_theme.dart';
+import 'routes/routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +23,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LoginProvider()),
+        ChangeNotifierProvider(create: (_) => HomeProvider(databaseApp)),
       ],
       child: const MyApp(),
     ),
@@ -34,6 +36,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: AppTheme.lightTheme,
       debugShowCheckedModeBanner: false,
       builder: (context, child) {
         ErrorWidget.builder = (errorDetails) {
@@ -42,7 +45,6 @@ class MyApp extends StatelessWidget {
         return child!;
       },
       title: 'EcoPost',
-      theme: ThemeData(primarySwatch: Colors.blue),
       initialRoute: '/onboarding',
       routes: Routes.routes,
     );
