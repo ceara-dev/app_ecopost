@@ -44,7 +44,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
     return prefs.getBool('onboardingCompleted') ?? false;
   }
 
-  // Marca o onboarding como concluído
   Future<void> _markOnboardingAsCompleted() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('onboardingCompleted', true);
@@ -56,11 +55,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
     _redirectUserIfNeeded();
   }
 
-  // Redireciona o usuário para a próxima tela se o onboarding já foi concluído
   Future<void> _redirectUserIfNeeded() async {
     bool onboardingCompleted = await _checkIfOnboardingCompleted();
     if (onboardingCompleted) {
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/login');
     }
   }
 

@@ -1,4 +1,6 @@
 // pages/home/home_page.dart
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/home_provider.dart';
@@ -30,9 +32,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
-    final homeProvider = Provider.of<HomeProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Notas'),

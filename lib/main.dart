@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         return child!;
       },
       title: 'EcoPost',
-      initialRoute: '/onboarding',
+      initialRoute: '/',
       routes: Routes.routes,
     );
   }
