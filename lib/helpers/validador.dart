@@ -1,6 +1,5 @@
 // helps/validador.dart
 class Validador {
- 
   static String? validarEmail(String? value) {
     if (value == null || value.isEmpty) {
       return "O campo email é obrigatório.";
@@ -9,7 +8,7 @@ class Validador {
     }
     return null;
   }
- 
+
   static String? validarSenha(String? value) {
     if (value == null || value.isEmpty) {
       return "O campo senha é obrigatório.";
@@ -19,7 +18,7 @@ class Validador {
     return null;
   }
 
-   static String? validarCampoGenerico(String? value, String nomeCampo) {
+  static String? validarCampoGenerico(String? value, String nomeCampo) {
     if (value == null || value.isEmpty) {
       return "O campo $nomeCampo é obrigatório.";
     }

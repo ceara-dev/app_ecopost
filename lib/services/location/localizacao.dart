@@ -8,7 +8,6 @@ class Localizacao {
   final Location _location = Location();
 
   Future<LocationData?> obterLocalizacaoAtual() async {
-    // Verifica e solicita permissão de localização
     final isGranted = await _permissionManager.handleLocationPermission();
     if (!isGranted) {
       ConsoleLog.mensagem(
@@ -20,7 +19,6 @@ class Localizacao {
     }
 
     try {
-      // Obtém a localização atual
       final locationData = await _location.getLocation();
 
       ConsoleLog.mensagem(
@@ -38,6 +36,46 @@ class Localizacao {
         tipo: StatusConsole.error,
       );
       return null;
+    }
+  }
+
+  Future<List<double>> getobterLocalizacaoAtual() async {
+    final isGranted = await _permissionManager.handleLocationPermission();
+    if (!isGranted) {
+      ConsoleLog.mensagem(
+        titulo: 'getobterLocalizacaoAtual',
+        mensagem: 'Permissão de localização não concedida.',
+        tipo: StatusConsole.error,
+      );
+      return [0, 0];
+    }
+
+    try {
+      final locationData = await _location.getLocation();
+
+      ConsoleLog.mensagem(
+        titulo: 'Localização obtida',
+        mensagem:
+            "Latitude=${locationData.latitude}, Longitude=${locationData.longitude}",
+        tipo: StatusConsole.sucesso,
+      );
+
+      if (locationData.latitude != null && locationData.longitude != null) {
+        return [locationData.latitude!, locationData.longitude!];
+      }
+      ConsoleLog.mensagem(
+        titulo: 'getobterLocalizacaoAtual',
+        mensagem: 'Latitude ou longitude inválida.',
+        tipo: StatusConsole.error,
+      );
+      return [0, 0];
+    } catch (e) {
+      ConsoleLog.mensagem(
+        titulo: 'Erro ao obter localização',
+        mensagem: e.toString(),
+        tipo: StatusConsole.error,
+      );
+      return [0, 0];
     }
   }
 }
