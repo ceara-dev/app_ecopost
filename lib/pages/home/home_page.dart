@@ -1,9 +1,14 @@
 // pages/home/home_page.dart
 // ignore_for_file: unused_field
 
+import 'package:app_ecopost/pages/home/Inicio_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/home_provider.dart';
+import '../../services/location/localizacao.dart';
+import '../../wigets/custom_avatar.dart';
+import 'mapa_page.dart';
+import 'perfil_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,10 +19,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TextEditingController _textController = TextEditingController();
+  final localizacao = Localizacao();
+  List<double> localizacaos = [];
 
   @override
   void initState() {
     super.initState();
+    _localizacao();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<HomeProvider>(context, listen: false).loadTests();
     });
@@ -31,35 +39,31 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<void> _localizacao() async {
+    localizacaos = await localizacao.getobterLocalizacaoAtual();
+    setState(() => localizacao);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notas'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: CustomAppBarWithAvatar()),
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          Center(child: Text('Página Início')), // Substitua por sua widget real
-          Center(child: Text('Página Buscar')), // ou crie arquivos separados
-          Center(child: Text('Página Mapa')),
-          Center(child: Text('Página Perfil')),
+          InicioPage(),
+          Center(child: Text('Página Buscar')),
+          localizacaos.isNotEmpty
+              ? MapaPage(
+                  title: '2',
+                  latitudeInit: localizacaos[0],
+                  longitudeInit: localizacaos[1],
+                )
+              : const Center(
+                  child: CircularProgressIndicator(),
+                ),
+          PerfilPage(),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushReplacementNamed(context, '/camera');
-        },
-        tooltip: 'Abrir câmera',
-        backgroundColor: Theme.of(context).primaryColor,
-        foregroundColor: Colors.white,
-        splashColor: Colors.tealAccent,
-        elevation: 6,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: const Icon(Icons.qr_code_scanner_outlined, size: 28),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -81,7 +85,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
