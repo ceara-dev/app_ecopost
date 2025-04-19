@@ -33,7 +33,6 @@ class _LoginPageState extends State<LoginPage> {
         width: size.width,
         child: Stack(
           children: [
-            // Fundo Verde Vibrante
             Container(
               height: size.height * 0.6,
               width: size.width,
@@ -69,8 +68,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-
-            // Formulário de Login
             Positioned(
               top: size.height * 0.4 - 24,
               child: Center(
@@ -94,7 +91,6 @@ class _LoginPageState extends State<LoginPage> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Campo Email
                         TextFormField(
                           controller: _controller.emailController,
                           decoration: InputDecoration(
@@ -119,9 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                           keyboardType: TextInputType.emailAddress,
                           validator: Validador.validarEmail,
                         ),
-                        const SizedBox(height: 16.0),
-
-                        // Campo Senha
+                        const SizedBox(height: 28.0),
                         TextFormField(
                           controller: _controller.passwordController,
                           obscureText: _obscurePassword,
@@ -157,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           validator: Validador.validarSenha,
                         ),
-                        const SizedBox(height: 48.0),
+                        const SizedBox(height: 28.0),
                         ElevatedButton(
                           onPressed: () {
                             if (_controller.validateForm(_formKey)) {
