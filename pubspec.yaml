@@ -1,0 +1,50 @@
+name: app_ecopost
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.0.0+1
+environment:
+  sdk: ^3.5.3
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  path_provider: ^2.1.5
+  sqlite3: ^2.7.5
+  provider: ^6.1.4
+  intl: ^0.20.2
+  flutter_dotenv: ^5.2.1
+  sqlite3_flutter_libs: ^0.5.32
+  onboarding: ^4.0.2
+  shared_preferences: ^2.5.3
+  flutter_native_splash: ^2.4.4
+  location: ^7.0.1
+  permission_handler: ^12.0.0+1
+  package_info_plus: ^8.3.0
+  another_flutter_splash_screen: ^1.2.1
+  latlong2: ^0.9.1
+  connectivity_plus: ^6.1.3
+  flutter_map: ^7.0.2
+flutter_native_splash:
+  color: "#FBB232"
+  image: "assets/logo_aplicativo.png"
+  android: true
+  ios: true
+flutter_icons:
+  image_path: "assets/logo_aplicativo.png"
+  ios: true
+  android: true
+  adaptive_icon_foreground: "assets/logo_aplicativo.png"
+  adaptive_icon_background: "#FFFFFF"
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+flutter:
+  uses-material-design: true
+  assets:
+    - .env
+    - .env.dev
+    - .env.homolog
+    - .env.prod
+    - assets/logo_sem_fundo.png
+    - assets/logo_aplicativo.png

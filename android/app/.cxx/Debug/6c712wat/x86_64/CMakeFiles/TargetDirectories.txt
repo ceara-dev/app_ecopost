@@ -1,0 +1,2 @@
+/home/caju25/Documentos/app_ecopost/android/app/.cxx/Debug/6c712wat/x86_64/CMakeFiles/edit_cache.dir
+/home/caju25/Documentos/app_ecopost/android/app/.cxx/Debug/6c712wat/x86_64/CMakeFiles/rebuild_cache.dir

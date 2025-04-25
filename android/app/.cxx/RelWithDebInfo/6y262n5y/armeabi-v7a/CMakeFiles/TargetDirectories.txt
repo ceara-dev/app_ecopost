@@ -1,0 +1,2 @@
+/home/caju25/Documentos/app_ecopost/android/app/.cxx/RelWithDebInfo/6y262n5y/armeabi-v7a/CMakeFiles/edit_cache.dir
+/home/caju25/Documentos/app_ecopost/android/app/.cxx/RelWithDebInfo/6y262n5y/armeabi-v7a/CMakeFiles/rebuild_cache.dir

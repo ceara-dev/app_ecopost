@@ -1,0 +1,177 @@
+import java.text.SimpleDateFormat
+
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+// Função para definir tipo de ambiente com base no flavor
+def getEnvTipo(value) {
+    if (value == 'desenvolvimento') return 'dev'
+    if (value == 'producao') return 'prod'
+    if (value == 'homologacao') return 'homolog'
+    return 'default'
+}
+
+// Função para carregar o arquivo .env.<tipo>
+def loadEnvFile(tipo) {
+    def envFileName = ".env.${tipo}"
+    def envFile = file("../../${envFileName}")
+
+    if (!envFile.exists()) {
+        println "⚠️ Arquivo ${envFileName} não encontrado! (${envFile.absolutePath})"
+        return null
+    }
+
+    try {
+        Properties properties = new Properties()
+        properties.load(envFile.newDataInputStream())
+        println "✅ Arquivo ${envFileName} carregado com sucesso."
+        return properties
+    } catch (Exception e) {
+        println "❌ Erro ao carregar o arquivo ${envFileName}: ${e.message}"
+        return null
+    }
+}
+
+// Função para carregar o key.properties
+def loadKeystoreProperties() {
+    def props = new Properties()
+    def propsFile = rootProject.file("key.properties")
+
+    if (propsFile.exists()) {
+        try {
+            props.load(new FileInputStream(propsFile))
+            println "🔐 key.properties carregado com sucesso."
+        } catch (Exception e) {
+            println "❌ Erro ao carregar key.properties: ${e.message}"
+        }
+    } else {
+        println "⚠️ Arquivo key.properties não encontrado em ${propsFile.absolutePath}"
+    }
+
+    return props
+}
+
+def keystoreProperties = loadKeystoreProperties()
+
+android {
+    namespace = "com.example.app_ecopost"
+    compileSdkVersion = 35
+    ndkVersion = "25.1.8937393"
+
+    defaultConfig {
+        applicationId = "com.example.app_ecopost"
+        minSdkVersion = 21
+        targetSdkVersion = 35
+        versionCode = 1
+        versionName = "0.0.1"
+        multiDexEnabled = true
+
+        resValue "string", "app_name", "EcoPost"
+
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+            keyAlias    keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+        }
+        debug {
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+            keyAlias    keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release ?: signingConfigs.debug
+            minifyEnabled = true
+            shrinkResources = true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.debug
+            minifyEnabled = false
+            shrinkResources = false
+        }
+    }
+
+    flavorDimensions "env"
+
+    productFlavors {
+        desenvolvimento {
+            dimension "env"
+            applicationIdSuffix ".dev"
+            versionNameSuffix "-dev"
+        }
+        homologacao {
+            dimension "env"
+            applicationIdSuffix ".homolog"
+            versionNameSuffix "-homolog"
+        }
+        producao {
+            dimension "env"
+            applicationIdSuffix ".prod"
+            versionNameSuffix "-prod"
+        }
+        defaultFlavor {
+            dimension "env"
+        }
+    }
+
+
+    applicationVariants.all { variant ->
+        def requestedTasks = gradle.startParameter.taskNames*.toLowerCase()
+        def variantName = variant.name.toLowerCase()
+
+        def isMatching = requestedTasks.any { task ->
+            task.contains(variantName) || task.contains("assemble${variantName.capitalize()}") || task.contains("install${variantName.capitalize()}")
+        }
+
+        if (isMatching) {
+            def flavorName = variant.flavorName.toLowerCase()
+            def tipo = getEnvTipo(flavorName)
+
+            def sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+            def agora = sdf.format(new Date())
+
+            println "=============================="
+            println "🌱 Ambiente selecionado: ${tipo}"
+            println "🕒 Data/hora: ${agora}"
+            println "📱 SDK Android: ${android.compileSdkVersion}"
+            println "=============================="
+
+            def env = loadEnvFile(tipo)
+
+            if (env != null) {
+                variant.resValue "string", "app_name", "\"${env['APP_NAME'] ?: 'EcoPost'}\""
+            }
+        }
+    }
+}
+
+flutter {
+    source = "../.."
+}
+
+dependencies {
+    implementation "androidx.multidex:multidex:2.0.1"
+}

@@ -1,0 +1,19 @@
+appId: com.example.app_ecopost
+---
+- launchApp:
+    clearState: true
+# Primeiro clique
+- assertVisible:
+    text: "Próximo"
+- tapOn:
+    text: "Próximo"
+# Segundo clique
+- assertVisible:
+    text: "Próximo"
+- tapOn:
+    text: "Próximo"
+# Terceiro clique
+- assertVisible:
+    text: "Concluir"
+- tapOn:
+    text: "Concluir"
