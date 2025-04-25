@@ -26,7 +26,7 @@ jobs:
 
       # Passo 4: Gerar o APK
       - name: Build APK
-        run: fvm flutter build apk --release --flavor producao -t lib/main_prod.dart
+        run: flutter build apk --release --flavor producao -t lib/main_prod.dart
 
       # Passo 5: Renomear o APK
       - name: Rename APK
