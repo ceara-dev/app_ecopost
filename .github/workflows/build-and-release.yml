@@ -1,0 +1,42 @@
+name: Build and Release APK
+
+on:
+  push:
+    branches:
+      - 'main' # Dispara o workflow apenas quando há um push na branch main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Passo 1: Fazer checkout do código
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Passo 2: Configurar o Flutter
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.3' # Altere para a versão do Flutter que você usa
+
+      # Passo 3: Instalar dependências
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Passo 4: Gerar o APK
+      - name: Build APK
+        run: flutter build apk --release
+
+      # Passo 5: Renomear o APK
+      - name: Rename APK
+        run: mv build/app/outputs/flutter-apk/app-release.apk EcoPost_${GITHUB_REF_NAME}.apk
+
+      # Passo 6: Criar uma Release e fazer Upload do APK
+      - name: Create Release and Upload APK
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: latest # Usa "latest" como nome da tag ou versão
+          files: EcoPost_${GITHUB_REF_NAME}.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
